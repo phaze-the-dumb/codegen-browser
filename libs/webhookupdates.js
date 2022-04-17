@@ -1,4 +1,5 @@
 const http = require('http');
+const log = require('./discord.js');
 
 http.createServer((req, res) => {
     console.log(req.url, req.method, req.headers)
@@ -7,6 +8,16 @@ http.createServer((req, res) => {
     req.on('data', chunk => chunks.push(chunk));
     req.on('end', () => {
         const data = Buffer.concat(chunks);
-        console.log('Data: ', data.toString());
+
+        try{
+            let jsonData = data.toJSON()
+
+            log('Webhook Recived And Was JSON', '#00ff00')
+        } catch(e){
+            log('Webhook Recived But Wasn\'t JSON', '#ff7700');
+        }
+
+        res.write('why helo there...');
+        res.end();
     })
-}).listen(111);
+}).listen(112);
